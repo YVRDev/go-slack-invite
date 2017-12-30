@@ -10,7 +10,16 @@ import (
 	"os"
 )
 
-func hello(w http.ResponseWriter, r *http.Request) {
+func main() {
+	http.HandleFunc("/", invite)
+
+	fmt.Printf("Starting server for testing HTTP POST...\n")
+	if err := http.ListenAndServe(":3000", nil); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func invite(w http.ResponseWriter, r *http.Request) {
 	if r.URL.Path != "/" {
 		http.Error(w, "404 not found.", http.StatusNotFound)
 		return
@@ -48,15 +57,6 @@ func hello(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "Sorry, only GET and POST methods are supported.")
 	}
 
-}
-
-func main() {
-	http.HandleFunc("/", hello)
-
-	fmt.Printf("Starting server for testing HTTP POST...\n")
-	if err := http.ListenAndServe(":3000", nil); err != nil {
-		log.Fatal(err)
-	}
 }
 
 func getToken() string {
